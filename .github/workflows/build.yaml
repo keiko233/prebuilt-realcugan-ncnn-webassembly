@@ -1,0 +1,30 @@
+on:
+  workflow_dispatch:
+
+name: Build
+
+jobs:
+  build:
+    name: Build WASM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          ./emsdk install 3.1.13
+          ./emsdk activate 3.1.13
+          source emsdk_env.sh
+
+          cd ..
+
+          git clone https://github.com/hanfengsan/realcugan-ncnn-webassembly.git
+          cd realcugan-ncnn-webassembly
+          git clone https://github.com/Tencent/ncnn.git
+          git clone https://github.com/fmtlib/fmt.git
+          sh build.sh
+
+          cd ..
